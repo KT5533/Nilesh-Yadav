@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/Vasundhara/Downloads/index%20(2).html -->
+<!-- saved from url=(0054)file:///C:/Users/Vasundhara/Downloads/index%20(1).html -->
 <html lang="mr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,7 +61,7 @@ body{background:#0D1B1E;color:#F0EDE8;font-family:'DM Sans',sans-serif;min-heigh
 @keyframes slideIn{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
 @media(max-width:600px){.form-grid-3{grid-template-columns:1fr 1fr;}.stat-card{min-width:100px;}}
 </style>
-</head>
+<style type="text/css" id="operaUserStyle"></style></head>
 <body>
 
 <div class="header">
@@ -145,6 +145,10 @@ body{background:#0D1B1E;color:#F0EDE8;font-family:'DM Sans',sans-serif;min-heigh
           <label>Anniversary</label>
           <input type="date" id="f-anni">
         </div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Address</label>
+        <input type="text" id="f-address" placeholder="उदा. Flat 4B, Amanora Park, Hadapsar">
       </div>
       <div class="form-group" style="margin-bottom:16px;">
         <label>Notes / Preferences</label>
@@ -263,6 +267,7 @@ function saveGuest(){
   var pax=parseInt(document.getElementById('f-pax').value)||1;
   var dob=document.getElementById('f-dob').value;
   var anni=document.getElementById('f-anni').value;
+  var address=document.getElementById('f-address').value.trim();
   var notes=document.getElementById('f-notes').value.trim();
   var editId=document.getElementById('f-edit-id').value;
 
@@ -271,7 +276,7 @@ function saveGuest(){
 
   if(editId){
     guests=guests.map(function(g){
-      return g.id===editId?{id:g.id,name:name,phone:phone,pax:pax,dob:dob,anni:anni,notes:notes,at:g.at}:g;
+      return g.id===editId?{id:g.id,name:name,phone:phone,pax:pax,dob:dob,anni:anni,address:address,notes:notes,at:g.at}:g;
     });
     saveG();
     cancelEdit();
@@ -280,7 +285,7 @@ function saveGuest(){
   } else {
     if(guests.find(function(g){return g.phone===phone;})){showToast('हा phone आधीच registered','error');return;}
     var id=Date.now()+'';
-    guests.push({id:id,name:name,phone:phone,pax:pax,dob:dob,anni:anni,notes:notes,at:new Date().toISOString()});
+    guests.push({id:id,name:name,phone:phone,pax:pax,dob:dob,anni:anni,address:address,notes:notes,at:new Date().toISOString()});
     visits.push({id:id+'v',gid:id,date:new Date().toISOString(),pax:pax});
     saveG(); saveV();
     document.getElementById('f-name').value='';
@@ -288,6 +293,7 @@ function saveGuest(){
     document.getElementById('f-pax').value='1';
     document.getElementById('f-dob').value='';
     document.getElementById('f-anni').value='';
+    document.getElementById('f-address').value='';
     document.getElementById('f-notes').value='';
     showToast(name+' ला welcome! 🎉');
     showTab('list');
@@ -305,6 +311,7 @@ function cancelEdit(){
   document.getElementById('f-pax').value='1';
   document.getElementById('f-dob').value='';
   document.getElementById('f-anni').value='';
+  document.getElementById('f-address').value='';
   document.getElementById('f-notes').value='';
 }
 
@@ -317,6 +324,7 @@ function editGuest(id){
   document.getElementById('f-pax').value=g.pax;
   document.getElementById('f-dob').value=g.dob||'';
   document.getElementById('f-anni').value=g.anni||'';
+  document.getElementById('f-address').value=g.address||'';
   document.getElementById('f-notes').value=g.notes||'';
   document.getElementById('entry-title').textContent='✏️ Guest Update करा';
   document.getElementById('save-btn').textContent='✅ Update करा';
@@ -361,6 +369,7 @@ function openModal(id){
   var rows=[
     ['📞 Phone',g.phone],
     ['👥 Pax',g.pax],
+    ['🏠 Address',g.address||'—'],
     ['🎂 DOB',g.dob?new Date(g.dob).toLocaleDateString('mr-IN'):'—'],
     ['💑 Anniversary',g.anni?new Date(g.anni).toLocaleDateString('mr-IN'):'—'],
     ['📝 Notes',g.notes||'—']
